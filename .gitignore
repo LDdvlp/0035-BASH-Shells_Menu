@@ -1,0 +1,10 @@
+# Ne pas versionner les secrets
+.env
+
+# Fichiers temporaires
+*.log
+*.tmp
+
+# Binaries éventuels
+*.exe
+*.out
