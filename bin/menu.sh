@@ -10,8 +10,11 @@ ROOT_DIR="$(
 
 # Charger .env si présent
 if [ -f "$ROOT_DIR/.env" ]; then
-  # shellcheck source=./.env
+  # shellcheck disable=SC1091
   . "$ROOT_DIR/.env"
+else
+  echo "⚠️  Attention : fichier .env introuvable."
+  echo "Créez-le avec : cp .env.example .env"
 fi
 
 

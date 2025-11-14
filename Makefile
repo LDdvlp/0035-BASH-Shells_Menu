@@ -10,7 +10,7 @@ SCRIPTS := \
 
 .PHONY: all lint test run
 
-all: lint
+all: env-check lint
 
 lint:
 	@echo "==> Running shellcheck"
@@ -24,3 +24,7 @@ test:
 run:
 	@echo "==> Lancement du menu principal"
 	./bin/menu.sh
+
+env-check:
+	@echo "==> Vérification .env"
+	./tools/check_env.sh
