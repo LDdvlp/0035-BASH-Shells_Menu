@@ -1,6 +1,6 @@
 SHELL := /usr/bin/env bash
 
-# Liste des scripts à analyser
+# Liste des scripts a analyser
 SCRIPTS := \
 	bin/menu.sh \
 	lib/ascii.sh \
@@ -8,23 +8,29 @@ SCRIPTS := \
 	utils/sys-info.sh \
 	menu.sh
 
-.PHONY: all lint test run
+.PHONY: all env-check lint test run
 
 all: env-check lint
+
+env-check:
+	@echo "==> Verification .env"
+	./tools/check_env.sh
 
 lint:
 	@echo "==> Running shellcheck"
 	shellcheck -x $(SCRIPTS)
 
 test:
-	@echo "==> No automated tests yet."
-	@echo "    Pour l'instant, teste visuellement avec :"
-	@echo "      ./bin/menu.sh  ou  smenu dans Git Bash"
+	@echo "==> No automated tests yet"
+	@echo "    Please test manually with: make run"
 
 run:
-	@echo "==> Lancement du menu principal"
+	@echo "==> Starting main menu"
 	./bin/menu.sh
 
-env-check:
-	@echo "==> Vérification .env"
-	./tools/check_env.sh
+.PHONY: utils-links
+
+utils-links:
+	@echo "==> Creating symlinks in UTILS_BASE_DIR"
+	./tools/setup_utils_symlinks.sh
+ 
