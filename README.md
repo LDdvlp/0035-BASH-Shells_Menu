@@ -19,13 +19,13 @@ Version courante : **v0.1.0**
 ## 🎯 Objectifs du projet
 
 - Sélectionner le Shell voulu au lancement :
-  - Git Bash → Bash
-  - Git Bash → Zsh
-  - WSL → Bash
-  - WSL → Zsh
-  - Windows PowerShell
-  - PowerShell (pwsh)
-  - CMD
+  - Git Bash → Bash  
+  - Git Bash → Zsh  
+  - WSL → Bash  
+  - WSL → Zsh  
+  - Windows PowerShell  
+  - PowerShell (pwsh)  
+  - CMD  
   - Rester dans Git Bash
 
 - Afficher l’environnement et le shell choisi en **ASCII Art**
@@ -122,36 +122,55 @@ make utils-links
 
 ---
 
-## 🔧 CI/CD
+## 📐 Conventional Commits
 
-### CI – `ci.yml`
+Ce projet suit la spécification **Conventional Commits**.  
+Types et **exemples concrets** utilisés dans le projet :
 
-- S’exécute sur chaque `push` et `pull_request`
-- Installe `shellcheck`
-- Exécute `make lint`
+### ▶️ **feat** — nouvelle fonctionnalité
+```text
+feat(menu): add WSL ASCII art header
+```
 
-### CD – `cd.yml`
+### 🛠️ **fix** — correction de bug
+```text
+fix(utils): handle missing project folder in symlink generator
+```
 
-- S’exécute sur les tags `v*`
-- Re-lance la CI minimale (lint)
-- Pourra plus tard :
-  - générer des artefacts,
-  - publier des releases,
-  - mettre à jour une doc.
+### 📘 **docs** — documentation
+```text
+docs: update README with CI/CD badges
+```
 
----
+### 🎨 **style** — mise en forme
+```text
+style(menu): align ASCII art blocks
+```
 
-## 🧩 UTILS : mini-projets externes
+### 🔧 **refactor** — amélioration de code sans changer son comportement
+```text
+refactor(utils): simplify symlink detection logic
+```
 
-Les projets suivants sont automatiquement exposés via symlinks (côté Windows), dans `UTILS_BASE_DIR` :
+### ⚡ **perf** — optimisation
+```text
+perf(menu): accelerate shell detection logic
+```
 
-- `0012-BASH-cas-Converts_phrases_to_programming_casings`
-- `0013-BASH-diceware-Diceware_on_CLI`
-- `0023-BASH-rr-Removes_-_Raccourci_of_the_filenames_in_folder`
-- `0028-BASH-sshutilities-SSH_Utilities`
-- `0029-BASH-startssh-Starts _SSH_and_loads_private_key`
+### 🧪 **test** — tests automatisés
+```text
+test(menu): add tests for menu option parsing
+```
 
-Le menu **Utilities** utilisera ces projets dans une version ultérieure (v0.2.0).
+### 🔁 **ci** — modifications à l’intégration continue
+```text
+ci: update shellcheck version in CI
+```
+
+### 🧹 **chore** — maintenance interne
+```text
+chore(repo): move LICENSE and CONTRIBUTING.md from lib/ to root
+```
 
 ---
 
