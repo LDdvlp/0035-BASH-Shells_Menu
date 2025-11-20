@@ -10,6 +10,9 @@ et pipeline CI/CD complet.
 
 [![CI](https://github.com/LDdvlp/0035-BASH-Shells_Menu/actions/workflows/ci.yml/badge.svg)](https://github.com/LDdvlp/0035-BASH-Shells_Menu/actions/workflows/ci.yml)
 [![CD](https://github.com/LDdvlp/0035-BASH-Shells_Menu/actions/workflows/cd.yml/badge.svg)](https://github.com/LDdvlp/0035-BASH-Shells_Menu/actions/workflows/cd.yml)
+[![Version](https://img.shields.io/github/v/tag/LDdvlp/0035-BASH-Shells_Menu?label=version)](https://github.com/LDdvlp/0035-BASH-Shells_Menu/tags)
+[![Release](https://img.shields.io/github/v/release/LDdvlp/0035-BASH-Shells_Menu?label=release)](https://github.com/LDdvlp/0035-BASH-Shells_Menu/releases)
+
 
 Version courante : **v0.1.0**  
 État : **Base stable (CI/CD + symlinks + env-check + lint)**

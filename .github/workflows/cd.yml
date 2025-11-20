@@ -6,7 +6,8 @@ on:
       - "v*"
 
 jobs:
-  cd-validate:
+  cd-release:
+    name: Validate & create release
     runs-on: ubuntu-latest
 
     steps:
@@ -21,7 +22,56 @@ jobs:
       - name: Run lint
         run: make lint
 
-      - name: Show tag info
+      - name: Set version from tag
         run: |
-          echo "Tag: $GITHUB_REF"
-          echo "Repository: $GITHUB_REPOSITORY"
+          echo "VERSION=${GITHUB_REF_NAME}" >> $GITHUB_ENV
+          echo "Building release for version: ${GITHUB_REF_NAME}"
+
+      - name: Build release archives
+        run: |
+          mkdir -p dist
+
+          # Archive tar.gz (source complet à ce commit)
+          git archive --format=tar.gz -o "dist/0035-BASH-Shells_Menu-${VERSION}.tar.gz" "$GITHUB_SHA"
+
+          # Archive zip
+          git archive --format=zip    -o "dist/0035-BASH-Shells_Menu-${VERSION}.zip"    "$GITHUB_SHA"
+
+          ls -lh dist
+
+      - name: Create GitHub Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ env.VERSION }}
+          release_name: ${{ env.VERSION }}
+          draft: false
+          prerelease: false
+          body: |
+            Release automatique pour la version `${{ env.VERSION }}`.
+
+            - CI: ShellCheck OK
+            - Archives générées automatiquement (tar.gz + zip)
+            - Voir CHANGELOG.md pour le détail des changements.
+
+      - name: Upload tar.gz asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: dist/0035-BASH-Shells_Menu-${{ env.VERSION }}.tar.gz
+          asset_name: 0035-BASH-Shells_Menu-${{ env.VERSION }}.tar.gz
+          asset_content_type: application/gzip
+
+      - name: Upload zip asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: dist/0035-BASH-Shells_Menu-${{ env.VERSION }}.zip
+          asset_name: 0035-BASH-Shells_Menu-${{ env.VERSION }}.zip
+          asset_content_type: application/zip

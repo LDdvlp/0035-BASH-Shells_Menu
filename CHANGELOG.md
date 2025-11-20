@@ -1,26 +1,40 @@
 # Changelog – 0035-BASH-Shells_Menu
 
-Toutes les modifications notables de ce projet seront documentées dans ce fichier.
+Toutes les modifications notables sont documentées ici, par version.
 
-## [v0.1.0] - Base stable
+## [v0.1.1] – 2025-11-XX
 
-- Ajout du squelette du projet 0035-BASH-Shells_Menu
-- Mise en place du `Makefile` :
-  - `make lint` (ShellCheck)
+### Added
+- Workflow CD (`cd.yml`) avec création automatique de Release GitHub.
+- Génération d’archives tar.gz et zip lors des tags `v*`.
+- Badges Version & Release dans le README.
+- Section Conventional Commits avec exemples concrets.
+
+### Changed
+- README enrichi (CI/CD, roadmap, conventions de commit).
+
+---
+
+## [v0.1.0] – 2025-11-XX
+
+### Added
+- Squelette du projet 0035-BASH-Shells_Menu.
+- `Makefile` avec :
+  - `make lint`
   - `make env-check`
   - `make utils-links`
   - `make run`
-- Mise en place du pipeline CI (`.github/workflows/ci.yml`) :
-  - Lancement automatique sur `push` et `pull_request`
-  - Installation de `shellcheck`
-  - Exécution de `make lint`
-- Ajout de `.env.example` et de la gestion de `.env`
-- Ajout de `tools/check_env.sh` pour valider `.env`
-- Ajout de `tools/setup_utils_symlinks.sh` pour créer des symlinks vers les projets UTILS externes
-- Mise en place de la structure de base du README et de la roadmap.
+- Pipeline CI (`ci.yml`) : ShellCheck sur les scripts.
+- `.env.example` + gestion `.env`.
+- `tools/check_env.sh` pour valider `.env`.
+- `tools/setup_utils_symlinks.sh` pour créer automatiquement les symlinks vers les projets UTILS externes.
 
-Prochaines versions prévues :
-- **v0.2.0** : Utilities Menu
-- **v0.3.0** : intégration avancée WSL
-- **v0.4.0** : UX avancée du menu
-- **v1.0.0** : version stable avec tests automatisés et installateur.
+---
+
+## [v0.2.0] – Utilities Menu (à venir)
+
+### Planned
+- Menu Utilities qui liste les projets UTILS et permet de les lancer.
+- Gestion du retour vers le menu principal.
+
+...
