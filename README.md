@@ -220,3 +220,6 @@ Note: CHANGELOG is now auto-generated on tagged releases.
 
 ## Upcoming WSL integration
 This version prepares full WSL shell selection system.
+
+## Upcoming WSL integration
+This version prepares full WSL shell selection system.
