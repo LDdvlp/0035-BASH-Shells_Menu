@@ -1,5 +1,21 @@
 # Changelog – 0035-BASH-Shells_Menu
 
+## [v0.2.8] – 2025-11-21
+
+### 📘 Documentation
+- docs: add note about automatic changelog
+
+
+
+
+## [v0.2.7] – 2025-11-21
+
+### ✨ Features
+- feat(menu): add placeholder entry in Utilities menu
+
+
+
+
 ## [v0.2.6] – 2025-11-21
 
 ### 📘 Documentation
