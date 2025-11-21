@@ -215,3 +215,5 @@ Développeur Web & Shell, multi-environnements (Windows / WSL / Linux).
 ## 📜 Licence
 
 Ce projet est publié sous licence MIT. Voir le fichier [`LICENSE`](LICENSE).
+
+Note: CHANGELOG is now auto-generated on tagged releases.
