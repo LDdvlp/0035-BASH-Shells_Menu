@@ -10,12 +10,13 @@ permissions:
 
 jobs:
   cd-release:
-    name: Validate & create release
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # important pour voir tous les tags et l'historique
 
       - name: Install shellcheck
         run: |
@@ -25,21 +26,57 @@ jobs:
       - name: Run lint
         run: make lint
 
-      - name: Set version from tag
+      - name: Set version and default branch
+        id: vars
         run: |
           echo "VERSION=${GITHUB_REF_NAME}" >> $GITHUB_ENV
-          echo "Building release for version: ${GITHUB_REF_NAME}"
+          echo "DEFAULT_BRANCH=${GITHUB_REF_NAME%%/*}" >> $GITHUB_ENV || true
+          echo "VERSION=${GITHUB_REF_NAME}"
+        env:
+          GITHUB_REF_NAME: ${{ github.ref_name }}
+
+      - name: Detect previous tag
+        id: prev_tag
+        run: |
+          VERSION="${VERSION}"
+          # On essaie de trouver le tag précédent (celui juste avant VERSION)
+          if git describe --tags --abbrev=0 "${VERSION}^" >/dev/null 2>&1; then
+            PREV_TAG=$(git describe --tags --abbrev=0 "${VERSION}^")
+            echo "PREV_TAG=${PREV_TAG}" >> $GITHUB_ENV
+            echo "Previous tag: ${PREV_TAG}"
+          else
+            echo "PREV_TAG=" >> $GITHUB_ENV
+            echo "No previous tag found (first release or non-linear history)."
+          fi
+
+      - name: Update CHANGELOG on default branch
+        run: |
+          # On se place sur la branche par défaut du dépôt
+          DEFAULT_BRANCH="${{ github.event.repository.default_branch }}"
+          VERSION="${VERSION}"
+          PREV_TAG="${PREV_TAG}"
+
+          echo "Default branch: ${DEFAULT_BRANCH}"
+          git checkout "$DEFAULT_BRANCH"
+
+          # Générer/mettre à jour le CHANGELOG
+          tools/generate_changelog.sh "${VERSION}" "${PREV_TAG}"
+
+          if git diff --quiet; then
+            echo "Aucun changement dans CHANGELOG.md, pas de commit."
+          else
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git add CHANGELOG.md
+            git commit -m "chore(changelog): update for ${VERSION} [skip ci]"
+            git push origin "$DEFAULT_BRANCH"
+          fi
 
       - name: Build release archives
         run: |
           mkdir -p dist
-
-          # Archive tar.gz (source complet à ce commit)
           git archive --format=tar.gz -o "dist/0035-BASH-Shells_Menu-${VERSION}.tar.gz" "$GITHUB_SHA"
-
-          # Archive zip
           git archive --format=zip    -o "dist/0035-BASH-Shells_Menu-${VERSION}.zip"    "$GITHUB_SHA"
-
           ls -lh dist
 
       - name: Create GitHub Release
@@ -55,9 +92,8 @@ jobs:
           body: |
             Release automatique pour la version `${{ env.VERSION }}`.
 
-            - CI: ShellCheck OK
-            - Archives générées automatiquement (tar.gz + zip)
-            - Voir CHANGELOG.md pour le détail des changements.
+            Le fichier CHANGELOG.md a été mis à jour automatiquement.
+            Voir le dépôt pour le détail des modifications.
 
       - name: Upload tar.gz asset
         uses: actions/upload-release-asset@v1
