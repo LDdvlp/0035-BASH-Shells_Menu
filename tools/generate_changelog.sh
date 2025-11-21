@@ -1,12 +1,11 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Usage:
+# Usage :
 #   tools/generate_changelog.sh <VERSION> [<PREVIOUS_TAG>]
 #
-# Exemple:
-#   tools/generate_changelog.sh v0.2.4 v0.2.3
-#   tools/generate_changelog.sh v0.1.0   # si pas de tag précédent
+# Exemple :
+#   tools/generate_changelog.sh v0.2.8 v0.2.7
 
 VERSION="${1:-}"
 PREV_TAG="${2:-}"
@@ -20,7 +19,7 @@ fi
 if [[ -n "$PREV_TAG" ]]; then
   RANGE="${PREV_TAG}..${VERSION}"
 else
-  # Pas de tag précédent : on prend tout l'historique jusqu'à VERSION
+  # Pas de tag précédent : on prend tout ce qui mène à VERSION
   RANGE="${VERSION}"
 fi
 
@@ -63,6 +62,7 @@ today=$(date +"%Y-%m-%d")
 
 # Construire le bloc markdown pour cette version
 tmp_block="$(mktemp)"
+
 {
   echo "## [${VERSION}] – ${today}"
   echo
@@ -147,26 +147,44 @@ tmp_block="$(mktemp)"
     echo
   fi
 
+  echo "---"
   echo
 } > "$tmp_block"
 
-# Intégrer dans CHANGELOG.md (en haut)
+# Intégrer dans CHANGELOG.md en préservant l’entête existante
 changelog="CHANGELOG.md"
 tmp_changelog="$(mktemp)"
 
 if [[ -f "$changelog" ]]; then
-  # On conserve la première ligne (titre), puis on insère le nouveau bloc, puis l'ancien contenu (moins la première ligne)
+  header_file="$(mktemp)"
+  tail_file="$(mktemp)"
+  found_first_version=0
+
+  # On découpe : entête (avant le premier "## [") et reste
+  while IFS= read -r line; do
+    if [[ $found_first_version -eq 0 && "$line" == "## ["* ]]; then
+      found_first_version=1
+      printf '%s\n' "$line" >> "$tail_file"
+    elif [[ $found_first_version -eq 0 ]]; then
+      printf '%s\n' "$line" >> "$header_file"
+    else
+      printf '%s\n' "$line" >> "$tail_file"
+    fi
+  done < "$changelog"
+
   {
-    read -r first_line
-    echo "${first_line}"
+    cat "$header_file"
     echo
     cat "$tmp_block"
-    echo
-    cat
-  } < "$changelog" > "$tmp_changelog"
+    cat "$tail_file"
+  } > "$tmp_changelog"
+
+  rm -f "$header_file" "$tail_file"
 else
   {
     echo "# Changelog – 0035-BASH-Shells_Menu"
+    echo
+    echo "Toutes les modifications notables sont documentées ici, par version."
     echo
     cat "$tmp_block"
   } > "$tmp_changelog"
