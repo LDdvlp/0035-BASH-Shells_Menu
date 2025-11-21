@@ -59,18 +59,11 @@ jobs:
           echo "Default branch: ${DEFAULT_BRANCH}"
           git checkout "$DEFAULT_BRANCH"
 
-          # Générer/mettre à jour le CHANGELOG
-          tools/generate_changelog.sh "${VERSION}" "${PREV_TAG}"
+          # S'assurer que le script est exécutable
+          chmod +x tools/generate_changelog.sh
 
-          if git diff --quiet; then
-            echo "Aucun changement dans CHANGELOG.md, pas de commit."
-          else
-            git config user.name "github-actions[bot]"
-            git config user.email "github-actions[bot]@users.noreply.github.com"
-            git add CHANGELOG.md
-            git commit -m "chore(changelog): update for ${VERSION} [skip ci]"
-            git push origin "$DEFAULT_BRANCH"
-          fi
+          # Générer/mettre à jour le CHANGELOG
+          ./tools/generate_changelog.sh "${VERSION}" "${PREV_TAG}"
 
       - name: Build release archives
         run: |
