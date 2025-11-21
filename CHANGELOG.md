@@ -1,5 +1,22 @@
 # Changelog – 0035-BASH-Shells_Menu
 
+## [v0.2.6] – 2025-11-21
+
+### 📘 Documentation
+- docs: modify README
+
+### 🔁 CI/CD
+- ci(cd): fix changelog script execution
+- ci(cd): auto-update CHANGELOG on tagged releases
+- ci(cd): add contents write permission for auto-release
+- ci(cd): add auto-release workflow and version/release badges
+
+### 🧹 Chores
+- chore(changelog): make generate_changelog executable
+
+
+
+
 Toutes les modifications notables sont documentées ici, par version.
 
 ## [v0.1.1] – 2025-11-XX
